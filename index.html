@@ -3,149 +3,671 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mock Test Notification Bar</title>
+  <title>Mock Test App</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    /* General Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* Body Styling */
     body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f3f4f6; /* Soft gray for a clean background */
+      font-family: 'Roboto', sans-serif;
+      background: #f0f2f5;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
     }
 
-    /* Notification Bar Styling */
-    .notification-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: linear-gradient(90deg, #1d3557, #457b9d); /* Sleek and modern gradient */
-      color: #fff;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: bold;
+    /* Sidebar Styling */
+    .sidebar {
+      width: 280px;
+      height: 100vh;
+      background: #2c3e50;
+      color: #ecf0f1;
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
+      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
       z-index: 1000;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for emphasis */
-      transition: transform 0.4s ease;
     }
 
-    .notification-bar.slide-out {
-      transform: translateY(-100%); /* Slide out on close */
+    .sidebar h4 {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: #34495e;
+      margin-bottom: 20px;
     }
 
-    .notification-text {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .test-list {
+      list-style: none;
+      padding: 0;
     }
 
-    .notification-icon {
-      font-size: 20px;
-    }
-
-    /* Close Button Styling */
-    #close-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
+    .test-list li {
+      padding: 15px 20px;
       cursor: pointer;
-      margin-left: 15px;
-      transition: transform 0.3s ease, color 0.3s ease;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
     }
 
-    #close-btn:hover {
-      color: #e63946; /* Red highlight on hover */
-      transform: scale(1.1);
+    .test-list li:hover {
+      background: #34495e;
+      border-left: 4px solid #3498db;
+      color: #fff;
+    }
+
+    .test-list li.active {
+      background: #3498db;
+      border-left: 4px solid #2980b9;
+      color: #fff;
     }
 
     /* Main Content Styling */
-    .content {
-      padding-top: 100px; /* Avoid overlap with notification bar */
-      text-align: center;
+    .main-content {
+      margin-left: 280px;
+      padding: 20px;
+      width: calc(100% - 280px);
+      background: #fff;
+      min-height: 100vh;
+      transition: all 0.3s ease;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #1d3557; /* Deep blue for elegance */
+    /* Start Test Button Container */
+    #startTestBtnContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    p {
-      font-size: 1.2rem;
-      color: #555;
-    }
-
-    /* Button Styling */
-    .main-button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 25px;
-      font-size: 16px;
-      font-weight: bold;
+    #startTestBtn {
+      padding: 12px 40px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: #3498db;
       color: #fff;
-      background: linear-gradient(90deg, #e63946, #f77f00); /* Gradient with contrasting, bold tones */
-      text-decoration: none;
-      border-radius: 30px;
-      transition: background 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
     }
 
-    .main-button:hover {
-      background: linear-gradient(90deg, #f77f00, #e63946); /* Reverse gradient */
-      transform: translateY(-3px); /* Slight hover lift */
+    #startTestBtn:hover {
+      background: #2980b9;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+    }
+
+    /* Timer Styling */
+    .timer {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e74c3c;
+      background: #fce4e4;
+      padding: 8px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(231, 76, 60, 0.2);
+    }
+
+    /* Question Section Styling */
+    .question-section {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      padding: 12px;
+      border: 2px solid #dfe6e9;
+      border-radius: 8px;
+      background: #f9fbfc;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover {
+      background: #ecf0f1;
+      border-color: #b2bec3;
+    }
+
+    .option.selected {
+      background: #3498db;
+      color: #fff;
+      border-color: #3498db;
+    }
+
+    /* Navigation Buttons */
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .navigation-buttons button {
+      padding: 10px 25px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 48%;
+    }
+
+    .navigation-buttons button.prev {
+      background: #7f8c8d;
+      color: #fff;
+    }
+
+    .navigation-buttons button.next,
+    .navigation-buttons button.submit {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .navigation-buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .navigation-buttons button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    /* Result Section Styling */
+    .result-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .result-section h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .result-section p {
+      font-size: 1.3rem;
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Answer Review Section */
+    .answer-review {
+      margin-top: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .answer-review h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .review-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background: #f9fbfc;
+    }
+
+    .review-item.correct {
+      border-left: 4px solid #2ecc71;
+      color: #2ecc71;
+    }
+
+    .review-item.wrong {
+      border-left: 4px solid #e74c3c;
+      color: #e74c3c;
+    }
+
+    /* Reattempt Button */
+    .reattempt-btn {
+      margin-top: 20px;
+      padding: 10px 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .reattempt-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    /* Hidden Class */
+    .hidden {
+      display: none;
+    }
+
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 1.5rem;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 1100;
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
-      .notification-bar {
-        font-size: 14px;
-        padding: 10px 15px;
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        transform: translateX(0);
+        transition: left 0.3s ease;
+        z-index: 1000;
       }
-      .notification-text {
-        font-size: 14px;
+
+      .sidebar.active {
+        left: 0;
       }
-      #close-btn {
-        font-size: 20px;
+
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+      }
+
+      #startTestBtnContainer {
+        height: auto;
+        padding: 20px;
+      }
+
+      #startTestBtn {
+        padding: 10px 30px;
+        font-size: 1.2rem;
+        width: 100%;
+      }
+
+      .timer {
+        font-size: 1.2rem;
+        padding: 6px 10px;
+      }
+
+      .question-section, .answer-review {
+        padding: 15px;
+      }
+
+      .question {
+        font-size: 1.1rem;
+      }
+
+      .option {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+
+      .navigation-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .navigation-buttons button {
+        padding: 10px;
+        font-size: 0.9rem;
+        width: 100%;
+      }
+
+      .result-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .result-section p {
+        font-size: 1.1rem;
+        padding: 8px;
+      }
+
+      .answer-review h3 {
+        font-size: 1.3rem;
+      }
+
+      .review-item {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+
+      .reattempt-btn {
+        padding: 10px;
+        font-size: 1rem;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar h4 {
+        font-size: 1.5rem;
+        padding: 15px 0;
+      }
+
+      .test-list li {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+
+      .timer {
+        font-size: 1rem;
+      }
+
+      .question {
+        font-size: 1rem;
+      }
+
+      .option {
+        padding: 8px;
+        font-size: 0.85rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Notification Bar -->
-  <div class="notification-bar" id="notificationBar">
-    <div class="notification-text">
-      <span class="notification-icon">🔔</span>
-      Mock tests are coming soon! Stay tuned for updates.
-    </div>
-    <button id="close-btn">&times;</button>
+  <!-- Menu Toggle for Mobile -->
+  <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h4><i class="fas fa-book"></i> Tests</h4>
+    <ul class="test-list" id="testList">
+      <li data-test="1">Test 1</li>
+      <li data-test="2">Test 2</li>
+      <li data-test="3">Test 3</li>
+    </ul>
   </div>
 
   <!-- Main Content -->
-  <div class="content">
-    <h1>Welcome to the Mock Test Platform</h1>
-    <p>This is where students can take mock tests. Stay tuned for updates!</p>
-    <a href="#" class="main-button">Explore Now</a>
+  <div class="main-content">
+    <!-- Start Test Button -->
+    <div id="startTestBtnContainer">
+      <button id="startTestBtn">Start Test</button>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer hidden" id="timer">Time Left: <span id="time">10:00</span></div>
+
+    <!-- Question Section -->
+    <div class="question-section hidden" id="questionSection">
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="navigation-buttons">
+        <button class="prev" id="prevBtn" disabled>Previous</button>
+        <button class="next" id="nextBtn">Next</button>
+      </div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result-section hidden" id="resultSection">
+      <h2>Test Completed!</h2>
+      <p>Your Score: <span id="score">0</span> / <span id="totalQuestions">0</span></p>
+      <button class="reattempt-btn" id="reattemptBtn">Reattempt Test</button>
+    </div>
+
+    <!-- Answer Review Section -->
+    <div class="answer-review hidden" id="answerReviewSection">
+      <h3>Answer Review</h3>
+      <div id="reviewItems"></div>
+    </div>
   </div>
 
-  <!-- JavaScript -->
   <script>
-    const closeBtn = document.getElementById('close-btn');
-    const notificationBar = document.getElementById('notificationBar');
+    // Predefined Questions for Each Test
+    const tests = {
+      1: [
+        { question: "What is the capital of France?", options: ["Berlin", "Paris", "Madrid", "Rome"], answer: "Paris" },
+        { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: "Mars" },
+      ],
+      2: [
+        { question: "Who wrote 'Hamlet'?", options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"], answer: "William Shakespeare" },
+        { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4" },
+      ],
+      3: [
+        { question: "Which is the largest ocean?", options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], answer: "Pacific Ocean" },
+        { question: "What is the chemical symbol for water?", options: ["H2O", "CO2", "NaCl", "O2"], answer: "H2O" },
+      ],
+    };
 
-    closeBtn.addEventListener('click', () => {
-      notificationBar.classList.add('slide-out');
+    let currentTest = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let userAnswers = [];
+    let timer;
+
+    // DOM Elements
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.getElementById("sidebar");
+    const testList = document.getElementById("testList");
+    const startTestBtnContainer = document.getElementById("startTestBtnContainer");
+    const startTestBtn = document.getElementById("startTestBtn");
+    const questionSection = document.getElementById("questionSection");
+    const questionElement = document.getElementById("question");
+    const optionsElement = document.getElementById("options");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultSection = document.getElementById("resultSection");
+    const answerReviewSection = document.getElementById("answerReviewSection");
+    const reviewItems = document.getElementById("reviewItems");
+    const scoreElement = document.getElementById("score");
+    const totalQuestionsElement = document.getElementById("totalQuestions");
+    const reattemptBtn = document.getElementById("reattemptBtn");
+    const timerElement = document.getElementById("timer");
+
+    // Load Test
+    function loadTest(testId) {
+      currentTest = tests[testId];
+      currentQuestionIndex = 0;
+      score = 0;
+      userAnswers = Array(currentTest.length).fill(null);
+
+      startTestBtnContainer.classList.add("hidden");
+      questionSection.classList.remove("hidden");
+      timerElement.classList.remove("hidden");
+
+      startTimer(10 * 60); // 10 minutes
+      loadQuestion(currentQuestionIndex);
+
+      // Close sidebar on mobile after selecting a test
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove("active");
+      }
+    }
+
+    // Load Question
+    function loadQuestion(index) {
+      if (index < 0 || index >= currentTest.length) return;
+
+      const questionData = currentTest[index];
+      questionElement.textContent = questionData.question;
+      optionsElement.innerHTML = "";
+
+      questionData.options.forEach((option) => {
+        const optionButton = document.createElement("button");
+        optionButton.className = "option";
+        optionButton.textContent = option;
+        if (userAnswers[index] === option) optionButton.classList.add("selected");
+
+        optionButton.addEventListener("click", () => selectOption(index, option));
+        optionsElement.appendChild(optionButton);
+      });
+
+      prevBtn.disabled = index === 0;
+      nextBtn.textContent = index === currentTest.length - 1 ? "Submit" : "Next";
+    }
+
+    // Select Option
+    function selectOption(index, option) {
+      userAnswers[index] = option;
+      loadQuestion(currentQuestionIndex);
+    }
+
+    // Navigation
+    prevBtn.addEventListener("click", () => {
+      currentQuestionIndex--;
+      loadQuestion(currentQuestionIndex);
     });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentQuestionIndex === currentTest.length - 1) {
+        submitTest();
+      } else {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+      }
+    });
+
+    // Submit Test
+    function submitTest() {
+      clearInterval(timer);
+      score = userAnswers.reduce((acc, answer, index) => {
+        return acc + (answer === currentTest[index].answer ? 1 : 0);
+      }, 0);
+
+      questionSection.classList.add("hidden");
+      timerElement.classList.add("hidden");
+      resultSection.classList.remove("hidden");
+      scoreElement.textContent = score;
+      totalQuestionsElement.textContent = currentTest.length;
+
+      showAnswerReview();
+    }
+
+    // Show Answer Review
+    function showAnswerReview() {
+      answerReviewSection.classList.remove("hidden");
+      reviewItems.innerHTML = "";
+
+      currentTest.forEach((question, index) => {
+        const reviewItem = document.createElement("div");
+        reviewItem.className = `review-item ${userAnswers[index] === question.answer ? "correct" : "wrong"}`;
+        reviewItem.innerHTML = `
+          <strong>Q${index + 1}:</strong> ${question.question}<br>
+          <span>Your Answer:</span> ${userAnswers[index] || "Not Answered"}<br>
+          <span>Correct Answer:</span> ${question.answer}
+        `;
+        reviewItems.appendChild(reviewItem);
+      });
+    }
+
+    // Timer Functionality
+    function startTimer(duration) {
+      let timeLeft = duration;
+      const timeDisplay = document.getElementById("time");
+
+      timer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timeDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          submitTest();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    // Initialize App
+    function init() {
+      testList.addEventListener("click", (e) => {
+        if (e.target.tagName === "LI") {
+          const testId = e.target.getAttribute("data-test");
+          loadTest(testId);
+        }
+      });
+
+      startTestBtn.addEventListener("click", () => {
+        const firstTest = Object.keys(tests)[0];
+        loadTest(firstTest);
+      });
+
+      reattemptBtn.addEventListener("click", resetTest);
+
+      // Mobile Menu Toggle
+      menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+      });
+    }
+
+    // Reset Test
+    function resetTest() {
+      currentTest = null;
+      currentQuestionIndex = 0;
+      score = 0;
+      userAnswers = [];
+      clearInterval(timer);
+
+      resultSection.classList.add("hidden");
+      answerReviewSection.classList.add("hidden");
+      startTestBtnContainer.classList.remove("hidden");
+      questionSection.classList.add("hidden");
+      timerElement.classList.add("hidden");
+
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove("active");
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>

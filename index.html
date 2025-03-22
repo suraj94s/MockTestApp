@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Test Notification Bar</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f4f6; /* Soft gray for a clean background */
+      color: #333;
+    }
+
+    /* Notification Bar Styling */
+    .notification-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, #1d3557, #457b9d); /* Sleek and modern gradient */
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for emphasis */
+      transition: transform 0.4s ease;
+    }
+
+    .notification-bar.slide-out {
+      transform: translateY(-100%); /* Slide out on close */
+    }
+
+    .notification-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .notification-icon {
+      font-size: 20px;
+    }
+
+    /* Close Button Styling */
+    #close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      margin-left: 15px;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    #close-btn:hover {
+      color: #e63946; /* Red highlight on hover */
+      transform: scale(1.1);
+    }
+
+    /* Main Content Styling */
+    .content {
+      padding-top: 100px; /* Avoid overlap with notification bar */
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #1d3557; /* Deep blue for elegance */
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    /* Button Styling */
+    .main-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(90deg, #e63946, #f77f00); /* Gradient with contrasting, bold tones */
+      text-decoration: none;
+      border-radius: 30px;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-button:hover {
+      background: linear-gradient(90deg, #f77f00, #e63946); /* Reverse gradient */
+      transform: translateY(-3px); /* Slight hover lift */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .notification-bar {
+        font-size: 14px;
+        padding: 10px 15px;
+      }
+      .notification-text {
+        font-size: 14px;
+      }
+      #close-btn {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Notification Bar -->
+  <div class="notification-bar" id="notificationBar">
+    <div class="notification-text">
+      <span class="notification-icon">🔔</span>
+      Mock tests are coming soon! Stay tuned for updates.
+    </div>
+    <button id="close-btn">&times;</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h1>Welcome to the Mock Test Platform</h1>
+    <p>This is where students can take mock tests. Stay tuned for updates!</p>
+    <a href="#" class="main-button">Explore Now</a>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const closeBtn = document.getElementById('close-btn');
+    const notificationBar = document.getElementById('notificationBar');
+
+    closeBtn.addEventListener('click', () => {
+      notificationBar.classList.add('slide-out');
+    });
+  </script>
+</body>
+</html>
